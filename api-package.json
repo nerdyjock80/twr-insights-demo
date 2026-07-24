@@ -1,0 +1,9 @@
+{
+  "name": "twr-insights-api",
+  "version": "1.0.0",
+  "description": "Serverless API for the TWR Program Insights demo, deployed as a Static Web Apps managed Functions app.",
+  "main": "host.json",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

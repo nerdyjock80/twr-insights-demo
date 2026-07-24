@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TWR Program Insights</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --brand: #2F3E2E;
+    --brand-light: #4a6349;
+    --accent: #c9a15a;
+    --bg: #f4f3ef;
+    --card: #ffffff;
+    --text: #23291f;
+    --muted: #6b7268;
+    --good: #2e7d4f;
+    --warn: #b8862f;
+    --bad: #b8433a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    background: var(--brand);
+    color: white;
+    padding: 28px 32px;
+  }
+  header h1 { margin: 0 0 4px; font-size: 1.7rem; }
+  header p { margin: 0; opacity: 0.85; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-left: 4px solid var(--brand);
+  }
+  .kpi .label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .kpi .value { font-size: 1.8rem; font-weight: 700; margin: 4px 0; color: var(--brand); }
+  .kpi .sub { font-size: 0.8rem; color: var(--muted); }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+  .card h2 { margin-top: 0; font-size: 1.05rem; color: var(--brand); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; }
+  th { color: var(--muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+  .badge.positive { background: #e3f3e8; color: var(--good); }
+  .badge.neutral { background: #f2ecd9; color: var(--warn); }
+  .badge.negative { background: #fbe6e4; color: var(--bad); }
+  textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+  }
+  .btn-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--brand); color: white; }
+  .btn-secondary { background: #e9e6dc; color: var(--brand); }
+  .chip {
+    display: inline-block;
+    background: #eef1ec;
+    color: var(--brand);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.82rem;
+    margin: 3px 4px 0 0;
+  }
+  .status { font-size: 0.85rem; color: var(--muted); margin-top: 10px; min-height: 18px; }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>TWR Program Insights</h1>
+    <p>The Warriors Refuge &middot; live snapshot across all funded programs (illustrative data)</p>
+  </header>
+
+  <div class="wrap">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="label">GPD Beds Occupied</div>
+        <div class="value">45 / 52</div>
+        <div class="sub">86.5% occupancy across CT / SI / LD</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Permanent Housing Placement</div>
+        <div class="value">69.7%</div>
+        <div class="sub">Blended actual vs. 65&ndash;70% goals</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Employment Placement</div>
+        <div class="value">61.4%</div>
+        <div class="sub">Blended actual vs. 55&ndash;60% goals</div>
+      </div>
+      <div class="kpi">
+        <div class="label">This Month's VA Per Diem</div>
+        <div class="value">$86,900</div>
+        <div class="sub">At $68.64/occupied bed/day</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h2>Beds by Housing Model</h2>
+        <canvas id="bedsChart" height="220"></canvas>
+      </div>
+      <div class="card">
+        <h2>Placement Rates: Goal vs. Actual</h2>
+        <canvas id="placementChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>VA Per Diem Revenue &mdash; Trailing 6 Months</h2>
+      <canvas id="revenueChart" height="90"></canvas>
+    </div>
+
+    <div class="card">
+      <h2>Active Clients by Program</h2>
+      <table>
+        <thead>
+          <tr><th>Program</th><th>Funder</th><th>Active Clients</th></tr>
+        </thead>
+        <tbody id="programTable"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>✨ AI Feedback Analyzer</h2>
+      <p style="color: var(--muted); margin-top: -6px; font-size: 0.92rem;">
+        Paste a piece of client feedback or a case note below. Azure AI instantly reads sentiment and pulls out the key themes &mdash; the same technique could scan every intake survey or exit interview automatically.
+      </p>
+      <textarea id="feedbackText" placeholder="Paste feedback or a case note here..."></textarea>
+      <div class="btn-row">
+        <button class="btn-secondary" id="sampleBtn">Load sample feedback</button>
+        <button class="btn-primary" id="analyzeBtn">Analyze with AI</button>
+      </div>
+      <div class="status" id="status"></div>
+      <div id="results" style="margin-top: 14px;"></div>
+    </div>
+  </div>
+
+  <footer id="footerNote">Built with Azure Static Web Apps + Azure AI Language &middot; internal demo for TWR leadership</footer>
+
+<script>
+const bedsData = {
+  labels: ["Clinical Treatment", "Service Intensive", "Low Demand"],
+  capacity: [20, 22, 10],
+  occupied: [18, 19, 8]
+};
+
+const placementData = {
+  labels: ["CT Housing", "SI Housing", "LD Housing", "CT Employment", "SI Employment"],
+  goal: [65, 70, 60, 55, 60],
+  actual: [69, 74, 63, 59, 65]
+};
+
+const revenueData = {
+  labels: ["Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+  values: [74200, 79800, 81300, 83700, 85100, 86900]
+};
+
+const programs = [
+  { name: "Housing", funder: "VA GPD", clients: 45 },
+  { name: "Employment", funder: "HVRP (DOL)", clients: 62 },
+  { name: "Counseling", funder: "TVFA", clients: 38 },
+  { name: "Mental Health Counseling", funder: "TVC Mental Health", clients: 51 },
+  { name: "Peer Support", funder: "TVC General Assistance", clients: 40 },
+  { name: "Financial Assistance", funder: "TVC FVA", clients: 27 },
+  { name: "General Support", funder: "United Way", clients: 33 }
+];
+
+const tbody = document.getElementById("programTable");
+programs.forEach(p => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `<td>${p.name}</td><td>${p.funder}</td><td>${p.clients}</td>`;
+  tbody.appendChild(tr);
+});
+
+new Chart(document.getElementById("bedsChart"), {
+  type: "bar",
+  data: {
+    labels: bedsData.labels,
+    datasets: [
+      { label: "Capacity", data: bedsData.capacity, backgroundColor: "#c9c2ab" },
+      { label: "Occupied", data: bedsData.occupied, backgroundColor: "#2F3E2E" }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+});
+
+new Chart(document.getElementById("placementChart"), {
+  type: "bar",
+  data: {
+    labels: placementData.labels,
+    datasets: [
+      { label: "Goal %", data: placementData.goal, backgroundColor: "#c9c2ab" },
+      { label: "Actual %", data: placementData.actual, backgroundColor: "#c9a15a" }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: "bottom" } }, scales: { y: { beginAtZero: true, max: 100 } } }
+});
+
+new Chart(document.getElementById("revenueChart"), {
+  type: "line",
+  data: {
+    labels: revenueData.labels,
+    datasets: [{
+      label: "VA Per Diem Revenue ($)",
+      data: revenueData.values,
+      borderColor: "#2F3E2E",
+      backgroundColor: "rgba(47,62,46,0.12)",
+      fill: true,
+      tension: 0.3
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } } }
+});
+
+const feedbackText = document.getElementById("feedbackText");
+const sampleBtn = document.getElementById("sampleBtn");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const statusEl = document.getElementById("status");
+const resultsEl = document.getElementById("results");
+
+const SAMPLE_FEEDBACK = "I was really nervous coming into the program, but my case manager was so patient and supportive. The job readiness workshops helped me land an interview within three weeks, and I finally feel like I have a path forward. The only frustrating part was how long it took to get my first counseling appointment scheduled.";
+
+sampleBtn.addEventListener("click", () => {
+  feedbackText.value = SAMPLE_FEEDBACK;
+});
+
+function badgeClass(sentiment) {
+  if (sentiment === "positive") return "positive";
+  if (sentiment === "negative") return "negative";
+  return "neutral";
+}
+
+analyzeBtn.addEventListener("click", async () => {
+  const text = feedbackText.value.trim();
+  if (!text) {
+    statusEl.textContent = "Paste some feedback first, or click \"Load sample feedback.\"";
+    return;
+  }
+  statusEl.textContent = "Analyzing with Azure AI... 🤔";
+  resultsEl.innerHTML = "";
+  analyzeBtn.disabled = true;
+  try {
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text })
+    });
+    const data = await res.json();
+    const pct = Math.round((data.confidence || 0) * 100);
+    const sourceLabel = data.source === "azure-ai-language" ? "Azure AI Language" : "offline demo heuristic";
+    const chips = (data.keyPhrases || []).map(kp => `<span class="chip">${kp}</span>`).join(" ");
+    resultsEl.innerHTML = `
+      <div><span class="badge ${badgeClass(data.sentiment)}">${data.sentiment}</span> <span style="color: var(--muted); font-size: 0.85rem;">${pct}% confidence &middot; via ${sourceLabel}</span></div>
+      <div style="margin-top: 10px;"><strong style="font-size: 0.85rem; color: var(--muted);">KEY THEMES</strong><br/>${chips || "<em>none detected</em>"}</div>
+    `;
+    statusEl.textContent = "";
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = "Something went wrong talking to the analysis service.";
+  } finally {
+    analyzeBtn.disabled = false;
+  }
+});
+
+fetch('/api/health').then(r => r.json()).then(d => {
+  if (!d.azureConfigured) {
+    document.getElementById('footerNote').textContent =
+      'Running in offline demo mode (Azure AI Language key not set yet) — analysis uses a local keyword heuristic.';
+  }
+}).catch(() => {});
+</script>
+</body>
+</html>
